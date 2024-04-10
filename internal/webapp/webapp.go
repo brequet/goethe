@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-//go:embed frontend/dist/*
+//go:embed frontend-resources/*
 var frontendStatic embed.FS
 
 type WebAppHandler struct {
@@ -37,16 +37,16 @@ func getWebAppAssets() (fs.FS, error) {
 		return embed.FS{}, fmt.Errorf("checking frontend static folder: %w", err)
 	}
 
-	webDir, err := fs.Sub(frontendStatic, "frontend/dist")
+	webDir, err := fs.Sub(frontendStatic, "frontend-resources")
 	if err != nil {
-		return embed.FS{}, fmt.Errorf("getting frontend/dist folder from embeded front app: %w", err)
+		return embed.FS{}, fmt.Errorf("getting frontend-resources folder from embeded front app: %w", err)
 	}
 
 	return webDir, nil
 }
 
 func isFrontendFolderValid(frontendFs embed.FS) error {
-	if _, err := fs.Stat(frontendFs, "frontend/dist/index.html"); err != nil {
+	if _, err := fs.Stat(frontendFs, "frontend-resources/index.html"); err != nil {
 		return fmt.Errorf("frontendStatic does not contain index.html: %w", err)
 	}
 
