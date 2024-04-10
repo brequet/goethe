@@ -1,5 +1,21 @@
 <script>
   import Counter from "$lib/Counter.svelte";
+  import { onMount } from "svelte";
+  import { ApiService } from "../services/example/exampleService";
+
+  let helloMessage = "";
+  let goodbyeMessage = "";
+
+  const apiService = new ApiService();
+
+  onMount(async () => {
+    try {
+      helloMessage = await apiService.getHello();
+      goodbyeMessage = await apiService.getGoodbye();
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    }
+  });
 </script>
 
 <div class="flex flex-col items-center">
@@ -10,4 +26,9 @@
     template.
   </p>
   <p class="text-xl">The svelte-spa-router is used for routing.</p>
+  <p>Server says:</p>
+  <ul>
+    <li>Hello Message: {helloMessage}</li>
+    <li>Goodbye Message: {goodbyeMessage}</li>
+  </ul>
 </div>
